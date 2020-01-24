@@ -12,7 +12,10 @@ Automatically dismisses the portal page of OEBB train WLAN, so you don't have to
 
 ```sh
 sudo install oebbnetworkmanager.py /etc/NetworkManager/dispatcher.d/10-oebb
+sudo systemctl enable NetworkManager-dispatcher.service
 ```
+
+Make sure your connection is called `OEBB` or the script won't trigger.
 
 ## License
 
