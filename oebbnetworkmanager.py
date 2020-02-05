@@ -20,7 +20,8 @@ def connect():
             continue
         postdata[inp["name"]] = inp["value"]
 
-    sess.post("https://railnet.oebb.at/connecttoweb", data=postdata)
+    action_url = tree.find("form")["action"]
+    sess.post(action_url, data=postdata)
 
 if sys.argv[2] == "up" and os.environ["CONNECTION_ID"] == "OEBB":
     connect()

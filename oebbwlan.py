@@ -17,4 +17,5 @@ for inp in tree.find_all("input"):
         continue
     postdata[inp["name"]] = inp["value"]
 
-sess.post("https://railnet.oebb.at/connecttoweb", data=postdata)
+action_url = tree.find("form")["action"]
+sess.post(action_url, data=postdata)
