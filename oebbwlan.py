@@ -19,4 +19,5 @@ for inp in tree.find_all("input"):
     postdata[inp["name"]] = inp["value"]
 
 action_url = tree.find("form")["action"]
-sess.post(action_url, data=postdata)
+response = sess.post(action_url, data=postdata)
+sys.exit(0 if response.status_code == 200 else 1)
