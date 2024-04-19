@@ -24,7 +24,7 @@ sess.headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/201
 
 if verbose:
     print("Requesting login data...")
-wab = sess.get("https://wab.oebb.at/login")
+wab = sess.get(LOGIN_URL)
 ap_mac_url = re.search(r"https://'\+getHostname\(\)\+'(/.+)';", wab.text)
 portal_url = "https://portal-wab.oebb.at" + ap_mac_url.group(1)
 portal = sess.get(portal_url)
