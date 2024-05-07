@@ -5,15 +5,26 @@
 import requests
 import urllib.parse
 import re
+import sys
 
 POST_DATA = 'request=%7B%22model%22%3A%22customers%22%2C%22method%22%3A%22loginOverLoginModule%22%2C%22formName%22%3A%22login_oneclicklogin%22%2C%22formData%22%3A%7B%22profiles_id%22%3A%222%22%2C%22policy_1%22%3A1%2C%22submit_login%22%3A%22Login%22%7D%2C%22requestType%22%3A%22formValidation%22%2C%22params%22%3A%7B%22formID%22%3A%22formLoginOneClickLogin_6%22%2C%22data%22%3A%7B%22profiles_id%22%3A%222%22%2C%22policy_1%22%3A1%2C%22submit_login%22%3A%22Login%22%7D%7D%2C%22countPageImpression%22%3Atrue%7D'
 AJAX_URL = "https://portal-wab.oebb.at/Ajax/service/"
 LOGIN_URL = "https://wab.oebb.at/login"
 
+verbose = any(arg in sys.argv[1:] for arg in ('-v', '--verbose'))
+
 sess = requests.Session()
+response = sess.head("http://detectportal.firefox.com")
+if response.status_code == 200 and response.headers['Content-Length'] == "8":
+    if verbose:
+        print("Already online.")
+    sys.exit(0)
+
 sess.headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0"
 
-wab = sess.get("https://wab.oebb.at/login")
+if verbose:
+    print("Requesting login data...")
+wab = sess.get(LOGIN_URL)
 ap_mac_url = re.search(r"https://'\+getHostname\(\)\+'(/.+)';", wab.text)
 portal_url = "https://portal-wab.oebb.at" + ap_mac_url.group(1)
 portal = sess.get(portal_url)
@@ -27,7 +38,13 @@ login_req = sess.post(AJAX_URL, data=POST_DATA, headers={
     'Referer': 'https://portal-wab.oebb.at/customer/login'
 })
 login_resp = login_req.json()
-login_data = urllib.parse.urlencode({
+login_data = {
     "username": login_resp["result"]["loginProcess"]["username"],
-    "password": login_resp["result"]["loginProcess"]["password"]})
-sess.post(LOGIN_URL, data=login_data)
+    "password": login_resp["result"]["loginProcess"]["password"]}
+if verbose:
+    print("Logging in as",
+          ", ".join(k + "=" + v for k, v in login_data.items()))
+response = sess.post(LOGIN_URL, data=urllib.parse.urlencode(login_data))
+if verbose:
+    print(response.reason)
+sys.exit(0 if response.status_code == 200 else 1)
