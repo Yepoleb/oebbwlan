@@ -14,8 +14,8 @@ LOGIN_URL = "https://wab.oebb.at/login"
 verbose = any(arg in sys.argv[1:] for arg in ('-v', '--verbose'))
 
 sess = requests.Session()
-response = sess.head("http://detectportal.firefox.com")
-if response.status_code == 200 and response.headers['Content-Length'] == "8":
+detectportal_response = sess.get("http://detectportal.firefox.com").text
+if detectportal_response.startswith("success"):
     if verbose:
         print("Already online.")
     sys.exit(0)
