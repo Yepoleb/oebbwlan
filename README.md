@@ -1,6 +1,6 @@
 # OEBB WLAN
 
-Automatically dismisses the portal page of OEBB train WLAN, so you don't have to manually open it in your browser. Gnome NetworkManager integration is provided, but you can easily integrate it with any network manager that allows scripting on connection events.
+Automatically dismisses the portal page of OEBB train WLAN, so you don't have to manually open it in your browser. NetworkManager integration is provided, but you can easily integrate it with any network manager that allows scripting on connection events.
 
 ## Dependencies
 

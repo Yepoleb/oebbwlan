@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Script for use with Gnome NetworkManager
+# Script for use with NetworkManager daemon
 
 import requests
 import bs4
