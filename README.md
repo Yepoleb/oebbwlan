@@ -19,4 +19,4 @@ Make sure your connection is called `OEBB` or the script won't trigger.
 
 ## License
 
-CC-BY-4.0
+CC0
